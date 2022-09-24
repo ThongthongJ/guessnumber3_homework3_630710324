@@ -14,53 +14,87 @@ class _GamePageState extends State<GamePage> {
   var _input = '';
   final Game _game = Game();
 
-  void _handleClickButton(num) {
+  /*void _handleClickButton(num) {
+    setState(() {
+      if (num == -1) {
+        var endpoint = _input.length - 1;
+        _input = _input.substring(0, endpoint);
+      } else if (num == -2) {
+        _input = '';
+      } else if (num == -3) {
+        _input = 'Guess';
+      } else if (_input.length >= 3) {
+        return;
+      } else {
+        _input += num.toString();
+      }
+    });
+  }*/
 
-      setState(() {
-        if (num == -1) {
-          var endpoint = _input.length - 1;
-          _input = _input.substring(0, endpoint);
-        } else if (num == -2) {
-          _input = '';
+  Widget _buildNumberButton(int number) {
+    Function buttonAction;
+
+    Widget buttonChild;
+    if (number == -1) {
+      buttonAction = () {
+        if (_input.isNotEmpty) {
+          setState(() {
+            _input = _input.substring(0, _input.length - 1);
+          });
         }
-        else if (num == -3) {
-          _input = 'Guess';
-        } else if (_input.length >= 3) {
-          return;
-        } else {
-          _input += num.toString();
-        }
-      });
+      };
+      buttonChild = const Icon(
+        Icons.backspace_outlined,
+        color: Colors.purple,
+        size: 20,
+      );
+    } else if (number == -2) {
+      buttonAction = () {
+        setState(() {
+          _input = "";
+        });
+      };
+      buttonChild = const Icon(
+        Icons.close,
+        color: Colors.purple,
+        size: 20,
+      );
+    } else if (number == -3) {
+      buttonAction = () {
+        setState(() {
+          _input = "Guess";
+        });
+      };
+      buttonChild = Text('Guess');
+    } else {
+      buttonAction = () {
+        if (_input.length == 3) return;
+
+        setState(() {
+          _input += number.toString();
+        });
+      };
+      buttonChild = Text(
+        number.toString(),
+        style: const TextStyle(color: Colors.purple, fontSize: 16),
+      );
     }
 
-  Widget _buildNumberButton(int num) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => _handleClickButton(num),
-        customBorder: CircleBorder(),
-        child: Container(
-          width: 50.0,
-          height: 30.0,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            border: num != -1
-                ? Border.all(
-                    color: Color(0xFFCCCCCC),
-                    width: 1.0,
-                  )
-                : null,
+      padding: const EdgeInsets.all(4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => buttonAction(),
+          child: Container(
+            alignment: Alignment.center,
+            width: 56,
+            height: 32,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                border: Border.all(color: const Color(0xFFCCCCCC), width: 1)),
+            child: buttonChild,
           ),
-          child: num == -1
-              ? Icon(Icons.backspace_outlined)
-              : Text(
-                  num.toString(),
-                  style: GoogleFonts.firaCode(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
         ),
       ),
     );
