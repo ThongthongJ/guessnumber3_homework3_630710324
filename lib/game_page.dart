@@ -15,16 +15,16 @@ class _GamePageState extends State<GamePage> {
   final Game _game = Game();
 
   void _handleClickButton(num) {
-    if (num == -3) {
-      _input = 'ss';
-      setState(() {});
-    } else {
+
       setState(() {
         if (num == -1) {
           var endpoint = _input.length - 1;
           _input = _input.substring(0, endpoint);
         } else if (num == -2) {
           _input = '';
+        }
+        else if (num == -3) {
+          _input = 'Guess';
         } else if (_input.length >= 3) {
           return;
         } else {
@@ -32,7 +32,6 @@ class _GamePageState extends State<GamePage> {
         }
       });
     }
-  }
 
   Widget _buildNumberButton(int num) {
     return Padding(
